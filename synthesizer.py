@@ -368,6 +368,24 @@ def short_concat(
     else:
         wav = np.lib.pad(wav, ((0, 10), (0, 0)), 'constant', constant_values=0)
 
+def main(config):
+    # check if text is file
+    if (os.path.isfile(config.text)):
+        print('Synthesizing lines in file {:}'.format(config.text))
+        config.text = [line.rstrip('\n') for line in open(config.text)]
+    else:
+        print('Synthesizing string \"{:}\"'.format(config.text))
+
+    makedirs(config.sample_path)
+    synthesizer = Synthesizer()
+    synthesizer.load(config.load_path, config.num_speakers, config.checkpoint_step)
+
+    audio = synthesizer.synthesize(
+            texts=[config.text],
+            base_path=config.sample_path,
+            speaker_ids=[config.speaker_id],
+            attention_trim=False,
+            isKorean=config.is_korean)[0]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -379,15 +397,4 @@ if __name__ == "__main__":
     parser.add_argument('--checkpoint_step', default=None, type=int)
     parser.add_argument('--is_korean', default=True, type=str2bool)
     config = parser.parse_args()
-
-    makedirs(config.sample_path)
-
-    synthesizer = Synthesizer()
-    synthesizer.load(config.load_path, config.num_speakers, config.checkpoint_step)
-
-    audio = synthesizer.synthesize(
-            texts=[config.text],
-            base_path=config.sample_path,
-            speaker_ids=[config.speaker_id],
-            attention_trim=False,
-            isKorean=config.is_korean)[0]
+    main(config)
