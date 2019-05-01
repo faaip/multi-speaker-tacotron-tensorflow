@@ -89,6 +89,7 @@ class Synthesizer(object):
 
         if texts is not None and tokens is None:
             sequences = [text_to_sequence(text) for text in texts]
+            print(sequences)
         elif tokens is not None:
             sequences = tokens
 
@@ -375,6 +376,7 @@ def main(config):
         print('Synthesizing lines in file {:}'.format(config.text))
         config.text = [line.rstrip('\n') for line in open(config.text)]
     else:
+        config.text = [config.text]
         print('Synthesizing string \"{:}\"'.format(config.text))
 
     makedirs(config.sample_path)
@@ -382,7 +384,7 @@ def main(config):
     synthesizer.load(config.load_path, config.num_speakers, config.checkpoint_step)
 
     audio = synthesizer.synthesize(
-            texts=[config.text],
+            texts=config.text,
             base_path=config.sample_path,
             speaker_ids=[config.speaker_id],
             attention_trim=False,
