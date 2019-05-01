@@ -395,6 +395,6 @@ if __name__ == "__main__":
     parser.add_argument('--num_speakers', default=1, type=int)
     parser.add_argument('--speaker_id', default=0, type=int)
     parser.add_argument('--checkpoint_step', default=None, type=int)
-    parser.add_argument('--is_korean', default=True, type=str2bool)
+    parser.add_argument('--is_korean', default=False, type=str2bool)
     config = parser.parse_args()
     main(config)
