@@ -124,7 +124,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_speakers', default=1, type=int)
     parser.add_argument('--port', default=51000, type=int)
     parser.add_argument('--debug', default=False, type=str2bool)
-    parser.add_argument('--is_korean', default=True, type=str2bool)
+    parser.add_argument('--is_korean', default=False, type=str2bool)
     config = parser.parse_args()
 
     if os.path.exists(config.load_path):

@@ -369,6 +369,7 @@ def short_concat(
         wav = np.lib.pad(wav, ((0, 10), (0, 0)), 'constant', constant_values=0)
 
 def main(config):
+    print(config.text)
     # check if text is file
     if (os.path.isfile(config.text)):
         print('Synthesizing lines in file {:}'.format(config.text))
