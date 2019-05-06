@@ -1,32 +1,40 @@
 # %%
+from tqdm import tnrange, tqdm_notebook
+import glob
 from synthesizer import *
+import os
 # %%
-load_path = "/Users/au550101/Dropbox (Personal)/thesis/multi-speaker-tacotron-tensorflow/logs/_2019-04-12_18-02-51"
+load_path = "/Users/au550101/Dropbox (Personal)/thesis/multi-speaker-tacotron-tensorflow/logs/_2019-05-02_15-01-25/"
 num_speakers = 1
 synthesizer = Synthesizer()
 synthesizer.load(load_path, 1, None)
 
-# %%
-parser = argparse.ArgumentParser()
-parser.add_argument('--load_path', default=load_path)
-parser.add_argument('--sample_path', default="samples")
-parser.add_argument('--text', default="This is a test. Let's speak English.")
-parser.add_argument('--num_speakers', default=1, type=int)
-parser.add_argument('--speaker_id', default=0, type=int)
-parser.add_argument('--checkpoint_step', default=None, type=int)
-parser.add_argument('--is_korean', default=False, type=str2bool)
-config = parser.parse_args()
-# %%
-text = "This is a test. Let's speak English."
-speaker_id = [0]
-sample_path = "samples"
-# %%
-audio = synthesizer.synthesize(
-    texts=text,
-    base_path=sample_path,
-    speaker_ids=speaker_id,
-    attention_trim=False,
-    isKorean=False)[0]
 
+# %%
+text = ["This is a test. Let's speak English."]  # must be in list
+text = "/Users/au550101/uni/master_thesis/tts/multi-speaker-tacotron-tensorflow/txt.done.data.txt"
+speaker_id = [0]
+sample_path = "/Users/au550101/Dropbox (Personal)/thesis/multi-speaker-tacotron-tensorflow/samples/"
+step_no = sorted(glob(os.path.join(load_path, "model*")))
+sample_path = '{:}{:}/{:}/'.format(sample_path, load_path.split(
+    '/')[-2], get_most_recent_checkpoint(load_path).split('-')[-1])
+print(sample_path)
+# %%
+# make samples path
+if not os.path.exists(sample_path):
+    os.makedirs(sample_path)
+
+# check if text is a file
+if os.path.isfile(text):
+    text = [line.rstrip('\n') for line in open(text)]
+
+# %%
+for t in tqdm(text):
+    audio = synthesizer.synthesize(
+        texts=t,
+        base_path=sample_path,
+        speaker_ids=speaker_id,
+        attention_trim=False,
+        isKorean=False)[0]
 
 # %%

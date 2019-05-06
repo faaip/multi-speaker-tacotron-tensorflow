@@ -6,6 +6,7 @@ import argparse
 import numpy as np
 from glob import glob
 from tqdm import tqdm
+from tqdm import tnrange, tqdm_notebook
 import tensorflow as tf
 from functools import partial
 
